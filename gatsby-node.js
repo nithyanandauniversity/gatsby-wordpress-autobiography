@@ -7,9 +7,9 @@ module.exports.createPages = async ({ graphql, actions }) => {
         query {
             allContentfulBlogPost {
                 edges {
-                  node {
-                    slug
-                  }
+                    node {
+                        slug
+                    }
                 }
             }
         }
@@ -21,6 +21,37 @@ module.exports.createPages = async ({ graphql, actions }) => {
             path: `/blog/${edge.node.slug}`,
             context: {
                 slug: edge.node.slug
+            }
+        })
+    })
+
+    await categoryPages({graphql, actions})
+}
+
+const categoryPages = async ({ graphql, actions }) => {
+    const { createPage } = actions
+    const categoryTemplate = path.resolve('./src/templates/category.js')
+    const res = await graphql(`
+        query {
+            allWpCategory {
+                edges {
+                    node {
+                        name
+                        count
+                    }
+                }
+            }
+        }
+    `)
+    
+    console.log(JSON.stringify(res, undefined, 4))
+
+    res.data.allWpCategory.edges.forEach((edge) => {
+        createPage ({
+            component: categoryTemplate,
+            path: `/category/${edge.node.name}`,
+            context: {
+                category: edge.node.name
             }
         })
     })

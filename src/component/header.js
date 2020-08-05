@@ -36,6 +36,9 @@ const Header = () => {
                     <li>
                         <Link className={headerStyles.navItem} activeClassName={headerStyles.activeNavItem} to="/contact">Contact</Link>
                     </li>
+                    <li>
+                        <Link className={headerStyles.navItem} activeClassName={headerStyles.activeNavItem} to="/categories">Categories</Link>
+                    </li>
                 </ul>
             </nav>
         </header>

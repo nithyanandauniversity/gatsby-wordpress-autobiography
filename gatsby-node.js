@@ -38,6 +38,7 @@ const categoryPages = async ({ graphql, actions }) => {
                     node {
                         name
                         count
+                        slug
                     }
                 }
             }
@@ -47,11 +48,17 @@ const categoryPages = async ({ graphql, actions }) => {
     console.log(JSON.stringify(res, undefined, 4))
 
     res.data.allWpCategory.edges.forEach((edge) => {
+        if(edge.node.slug === "blog") {
+            console.log ("================")
+            console.log("Found Blog !!!!")
+            console.log(JSON.stringify(edge.node, undefined, 4))
+            console.log ("================")
+        }
         createPage ({
             component: categoryTemplate,
-            path: `/category/${edge.node.name}`,
+            path: `/category/${edge.node.slug}`,
             context: {
-                category: edge.node.name
+                category: edge.node.slug
             }
         })
     })

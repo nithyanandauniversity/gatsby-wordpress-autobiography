@@ -2,7 +2,7 @@ import React from 'react'
 import Layout from '../component/layout'
 import { graphql, Link } from 'gatsby'
 
-import blogStyles from '../pages/blog.module.scss'
+// import blogStyles from '../pages/blog.module.scss'
 import Head from '../component/head'
 import parse from 'html-react-parser';
 
@@ -13,7 +13,7 @@ export const query = graphql`
                 categories: {
                     nodes: {
                         elemMatch :{
-                            name: {
+                            slug: {
                                 eq: $category
                             }
                         }
@@ -30,25 +30,25 @@ export const query = graphql`
                     }
                     slug
                     title
-                    content
+                    excerpt
                 }
             }
         }
     }
 `
 const CategoryPage = props => {
-    console.log(JSON.stringify(props.data.allWpPost.edges, undefined, 4))
+    console.log(JSON.stringify(props.data.allWpPost))
     return (
         <Layout>
             <Head title="Category" />
             <h1>Categories</h1>
                 {props.data.allWpPost.edges.map((edge) => {
                     return (
-                        <div>
+                        <div key={edge.node.slug}>
                             <Link to={edge.node.slug}>
-                                {edge.node.name}
+                                {edge.node.title}
                             </Link>
-                            {parse(edge.node.content)}
+                            {parse(edge.node.excerpt)}
                         </div>
                     )
                 })}

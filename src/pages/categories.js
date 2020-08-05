@@ -14,6 +14,7 @@ const CategoriesPage = () => {
                         name
                         count
                         link
+                        slug
                     }
                 }
             }
@@ -28,7 +29,7 @@ const CategoriesPage = () => {
                 {data.allWpCategory.edges.map((edge) => {
                     return (
                         <li className={blogStyles.post} key={edge.node.name} >
-                            <Link to={edge.node.link}>
+                            <Link to={`../category/${edge.node.slug}`}>
                                 {edge.node.name} ({edge.node.count})
                             </Link> 
                         </li>

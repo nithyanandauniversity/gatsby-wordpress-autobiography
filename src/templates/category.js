@@ -42,18 +42,26 @@ export const query = graphql`
     }
 `
 const CategoryPage = props => {
-    console.log(JSON.stringify(props.data.allWpPost))
+    console.log(JSON.stringify(props.data.allWpPost.edges.find(_ => true)))
+    const edgeHead = props.data.allWpPost.edges.find(_ => true)
+    const categoryName = edgeHead.node.categories.nodes.find(_ => true).name
     return (
         <Layout>
             <Head title="Category" />
-            <h1>Categories</h1>
+            <h1>{categoryName}</h1>
                 {props.data.allWpPost.edges.map((edge) => {
-                    const url = edge.node.featuredImage.node.mediaItemUrl
+                    const urlNode = edge.node.featuredImage
+                    let url = undefined
+                    if(urlNode && urlNode !== null && urlNode?.node !== 'undefined') {
+                        url = urlNode.node.mediaItemUrl
+                    } 
                     return (
                         <div key={edge.node.slug}>
                             <Link to={edge.node.slug}>
                                 {edge.node.title}
-                                <img src={url} />
+                                {url !== '' &&
+                                    <img src={url} />
+                                }
                             </Link>
                             {parse(edge.node.excerpt)}
                         </div>

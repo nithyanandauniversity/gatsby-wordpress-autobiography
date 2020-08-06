@@ -30,6 +30,11 @@ export const query = graphql`
                     }
                     slug
                     title
+                    featuredImage {
+                        node {
+                            mediaItemUrl
+                        }
+                    }
                     excerpt
                 }
             }
@@ -43,10 +48,12 @@ const CategoryPage = props => {
             <Head title="Category" />
             <h1>Categories</h1>
                 {props.data.allWpPost.edges.map((edge) => {
+                    const url = edge.node.featuredImage.node.mediaItemUrl
                     return (
                         <div key={edge.node.slug}>
                             <Link to={edge.node.slug}>
                                 {edge.node.title}
+                                <img src={url} />
                             </Link>
                             {parse(edge.node.excerpt)}
                         </div>

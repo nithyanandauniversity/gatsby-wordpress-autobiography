@@ -1,42 +1,62 @@
 import React from 'react'
-import { graphql } from 'gatsby'
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
-
 import Layout from '../component/layout'
+import { graphql, Link } from 'gatsby'
+
+import blogStyles from '../pages/blog.module.scss'
 import Head from '../component/head'
 
+import parse from 'html-react-parser';
+
 export const query = graphql`
-    query($slug: String!) {
-        contentfulBlogPost (
-            slug: {
-                eq: $slug
+    query($category: String!) {
+        allWpPost (
+            filter: {
+                categories: {
+                    nodes: {
+                        elemMatch :{ slug: { eq: $category } }
+                    }
+                }
             }
         ) {
-            title
-            publishedDate(formatString: "MMMM Do, YYYY")
-            body {
-                json
+            edges {
+                node {
+                    categories { nodes { name  } }
+                    slug
+                    title
+                    featuredImage { node { mediaItemUrl } }
+                    excerpt
+                }
             }
         }
     }
 `
 const PostPage = props => {
-    const options = {
-        renderNode: {
-            "embedded-asset-block": (node) => {
-                const alt = node.data.target.fields.title['en-US']
-                const url = node.data.target.fields.file['en-US'].url
-                return <img alt={alt} src={url} />
-            }
-        }
-    }
-
+    console.log(JSON.stringify(props.data.allWpPost.edges.find(_ => true)))
+    const edgeHead = props.data.allWpPost.edges.find(_ => true)
+    const categoryName = edgeHead.node.categories.nodes.find(_ => true).name
     return (
         <Layout>
-            <Head title={props.data.contentfulBlogPost.title} />
-            <h1>{props.data.contentfulBlogPost.title}</h1>
-            <p>{props.data.contentfulBlogPost.publishedDate}</p>
-            {documentToReactComponents(props.data.contentfulBlogPost.body.json, options)}
+            <Head title="Category" />
+            <h1>{categoryName}</h1>
+                {props.data.allWpPost.edges.map((edge) => {
+                    const urlNode = edge.node.featuredImage
+                    let url = undefined
+                    if(urlNode && urlNode !== null && urlNode?.node !== 'undefined') {
+                        url = urlNode.node.mediaItemUrl
+                    } 
+                    return (
+                        <div key={edge.node.slug}>
+                            <Link className={blogStyles.post} 
+                            to={`/post/${edge.node.slug}`}>
+                                {edge.node.title}
+                                {url !== '' &&
+                                    <img src={url} />
+                                }
+                            </Link>
+                            {parse(edge.node.excerpt)}
+                        </div>
+                    )
+                })}
         </Layout>
     )
 }

@@ -25,7 +25,7 @@ const CategoriesPage = () => {
         <Layout>
             <Head title="Categories" />
             <h1>Categories</h1>
-            <ol className={blogStyles.posts}>
+            <ol className={blogStyles.posts} >
                 {data.allWpCategory.edges.map((edge) => {
                     return (
                         <li className={blogStyles.post} key={edge.node.name} >

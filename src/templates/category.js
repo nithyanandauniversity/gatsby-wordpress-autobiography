@@ -2,7 +2,7 @@ import React from 'react'
 import Layout from '../component/layout'
 import { graphql, Link } from 'gatsby'
 
-import blogStyles from './category.module.scss'
+import categoryStyles from './category.module.scss'
 import Head from '../component/head'
 import parse from 'html-react-parser';
 
@@ -40,7 +40,7 @@ const CategoryPage = props => {
         <Layout>
             <Head title="Category" />
             <h1>{categoryName}</h1>
-            <div className={blogStyles.gridContainer}>
+            <div className={categoryStyles.gridContainer}>
                 {props.data.allWpPost.edges.map((edge) => {
                     const urlNode = edge.node.featuredImage
                     let url = undefined
@@ -48,14 +48,16 @@ const CategoryPage = props => {
                         url = urlNode.node.mediaItemUrl
                     } 
                     return (
-                        <article key={edge.node.slug} className={blogStyles.post} >
+                        <article key={edge.node.slug} className={categoryStyles.post} >
                             <Link to={`/post/${edge.node.slug}`} >
                                 <h3>{edge.node.title}</h3>
                                 {url !== '' &&
                                     <img src={url} alt=''/>
                             }
                             </Link>
-                            {parse(edge.node.excerpt)}
+                            <section className={categoryName.post}>
+                                {parse(edge.node.excerpt)}
+                            </section>
                         </article>
                     )
                 })}

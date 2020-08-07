@@ -6,6 +6,7 @@
 .post {
     width: 300px;
     margin: 1rem 0;
+    box-shadow: 0 0 1px rgba(0,0,0,.1), 0 2px 4px rgba(0,0,0,.02);
 
     a {
         background: #f4f4f4;
@@ -31,6 +32,11 @@
         font-size: .8rem;
         font-style: italic;
     }
+
+    section {
+        overflow: hidden;
+        height: 200px;
+    }
 }
 
 .gridContainer {
@@ -47,6 +53,6 @@
     border: 1px solid black;
     text-align: center;
     font-size: 30px;
-    box-shadow: darken($color: #000000, $amount: 0);
+    overflow: hidden;
 }
   

@@ -3,6 +3,7 @@ const path = require('path')
 module.exports.createPages = async ({ graphql, actions }) => {    
     const { createPage } = actions
     const categoryTemplate = path.resolve('./src/templates/category.js')
+    const postTemplate = path.resolve('./src/templates/post.js')
     const res = await graphql(`
         query {
             allWpCategory {
@@ -11,21 +12,36 @@ module.exports.createPages = async ({ graphql, actions }) => {
                         name
                         count
                         slug
+                        posts {
+                            nodes {
+                                slug
+                                content
+                                featuredImage {
+                                  node {
+                                    mediaItemUrl
+                                  }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     `)
     
-    console.log(JSON.stringify(res, undefined, 4))
+    const filteredEdges = res.data.allWpCategory.edges.filter((edge) => 
+        edge.node.count != null && edge.node.count > 0
+    )
 
-    res.data.allWpCategory.edges.forEach((edge) => {
+    filteredEdges.forEach((edge) => {
+/*
         if(edge.node.slug === "blog") {
             console.log ("================")
             console.log("Found Blog !!!!")
             console.log(JSON.stringify(edge.node, undefined, 4))
             console.log ("================")
         }
+*/
         createPage ({
             component: categoryTemplate,
             path: `/category/${edge.node.slug}`,
@@ -33,8 +49,26 @@ module.exports.createPages = async ({ graphql, actions }) => {
                 category: edge.node.slug
             }
         })
+        
+        edge.node.posts.nodes.forEach((node) => {
+            let image = null
+            if(node.featuredImage !== null) {
+                image = node.featuredImage.node.mediaItemUrl
+            }
+            createPage ({
+                component: postTemplate,
+                path: `/post/${node.slug}`,
+                context: {
+                    slug: node.slug,
+                    title: node.title,
+                    content: node.content,
+                    featuredImage: image
+                }
+            })
+        })
     })
 }
+
 /*
 module.exports.onCreateNode = ({ node, actions }) => {
     const { createNodeField } = actions

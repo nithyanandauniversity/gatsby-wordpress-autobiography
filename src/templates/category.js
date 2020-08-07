@@ -52,7 +52,7 @@ const CategoryPage = props => {
                             <Link to={`/post/${edge.node.slug}`} >
                                 <h3>{edge.node.title}</h3>
                                 {url !== '' &&
-                                    <img src={url} />
+                                    <img src={url} alt=''/>
                             }
                             </Link>
                             {parse(edge.node.excerpt)}

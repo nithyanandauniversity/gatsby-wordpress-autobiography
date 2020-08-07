@@ -26,7 +26,7 @@ const CategoriesPage = () => {
             <Head title="Categories" />
             <h1>Categories</h1>
             <ol className={blogStyles.posts} >
-                {data.allWpCategory.edges.map((edge) => {
+                {data.allWpCategory.edges.filter((edge) => edge.node.count > 0).map((edge) => {
                     return (
                         <li className={blogStyles.post} key={edge.node.name} >
                             <Link to={`../category/${edge.node.slug}`}>

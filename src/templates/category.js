@@ -55,7 +55,7 @@ const CategoryPage = props => {
                                     <img src={url} alt=''/>
                             }
                             </Link>
-                            <section className={categoryName.post}>
+                            <section>
                                 {parse(edge.node.excerpt)}
                             </section>
                         </article>

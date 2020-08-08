@@ -16,6 +16,7 @@ module.exports.createPages = async ({ graphql, actions }) => {
                             nodes {
                                 slug
                                 content
+                                title
                                 featuredImage {
                                   node {
                                     mediaItemUrl
@@ -34,14 +35,6 @@ module.exports.createPages = async ({ graphql, actions }) => {
     )
 
     filteredEdges.forEach((edge) => {
-/*
-        if(edge.node.slug === "blog") {
-            console.log ("================")
-            console.log("Found Blog !!!!")
-            console.log(JSON.stringify(edge.node, undefined, 4))
-            console.log ("================")
-        }
-*/
         createPage ({
             component: categoryTemplate,
             path: `/category/${edge.node.slug}`,
@@ -50,6 +43,12 @@ module.exports.createPages = async ({ graphql, actions }) => {
             }
         })
         
+        const allPostsinCategory = edge.node.posts.nodes.map((node) => {
+            return {
+                slug: node.slug, 
+                title: node.title
+            }
+        })
         edge.node.posts.nodes.forEach((node) => {
             let image = null
             if(node.featuredImage !== null) {
@@ -62,7 +61,8 @@ module.exports.createPages = async ({ graphql, actions }) => {
                     slug: node.slug,
                     title: node.title,
                     content: node.content,
-                    featuredImage: image
+                    featuredImage: image,
+                    allPosts: allPostsinCategory
                 }
             })
         })

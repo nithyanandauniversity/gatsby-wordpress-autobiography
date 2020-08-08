@@ -11,3 +11,24 @@
 .content {
     flex-grow: 1;
 }
+/*
+body {
+  display: grid;
+  grid-template:
+    "header  header  header"
+    "divider divider divider"
+    "nav     main    sidebar"
+    "footer  footer  footer" /
+    200px 1fr 200px;
+  grid-gap: 20px 40px;
+}
+
+aside {
+  width: 30%;
+  padding-left: 15px;
+  margin-left: 15px;
+  float: right;
+  font-style: italic;
+  background-color: lightgray;
+}
+*/

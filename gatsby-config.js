@@ -7,8 +7,8 @@
 module.exports = {
   /* Your site config here */
   siteMetadata: {
-    title: 'Full-Stack Bootcamp!',
-    author: 'Akhil Kodali'
+    title: 'Autobiography of the Avatar',
+    author: 'Nithyananda Hindu University'
   },
   plugins: [
     {
